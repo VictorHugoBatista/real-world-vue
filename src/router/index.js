@@ -14,18 +14,20 @@ const routes = [
     component: EventList
   },
   {
-    path: "/event-create",
+    path: "/event/create",
     name: "event-create",
-    component: EventShow
+    component: EventCreate
   },
   {
-    path: "/event-show",
+    path: "/event/:id",
     name: "event-show",
-    component: EventCreate
+    component: EventShow,
+    props: true
   }
 ];
 
 const router = new VueRouter({
+  mode: "history",
   routes
 });
 
