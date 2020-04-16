@@ -4,7 +4,6 @@ import EventList from "../views/EventList";
 import EventShow from "../views/EventShow";
 import EventCreate from "../views/EventCreate";
 
-
 Vue.use(VueRouter);
 
 const routes = [
