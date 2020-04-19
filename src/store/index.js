@@ -8,6 +8,7 @@ export default new Vuex.Store({
   state: {
     events: [],
     hasNextPage: true,
+    event: {},
     user: {
       id: "abc123",
       name: "Adam Jahr"
@@ -32,6 +33,9 @@ export default new Vuex.Store({
     UPDATE_HAS_NEXT_PAGE(state, { totalCount, pageSize, currentPage }) {
       const currentPageTotalEvents = pageSize * currentPage;
       state.hasNextPage = totalCount > currentPageTotalEvents;
+    },
+    SET_EVENT(state, event) {
+      state.event = event;
     }
   },
   actions: {
@@ -51,7 +55,12 @@ export default new Vuex.Store({
           });
         })
         .catch(error => console.log(error));
-    }
+    },
+    fetchEvent({ commit }, id) {
+      EventService.getEvent(id)
+        .then(response => commit("SET_EVENT", response.data))
+        .catch(error => console.log(error));
+    },
   },
   modules: {},
   getters: {
