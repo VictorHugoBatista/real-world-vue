@@ -11,12 +11,14 @@
       </router-link>
       |
     </template>
-    <router-link
-      :to="{ name: 'event-list', query: { page: page + 1 } }"
-      rel="next"
-    >
-      Next page
-    </router-link>
+    <template v-if="hasNextPage">
+      <router-link
+        :to="{ name: 'event-list', query: { page: page + 1 } }"
+        rel="next"
+      >
+        Next page
+      </router-link>
+    </template>
   </div>
 </template>
 
@@ -38,7 +40,7 @@ export default {
     page() {
       return parseInt(this.$route.query.page) || 1;
     },
-    ... mapState(["events"])
+    ...mapState(["events", "hasNextPage"])
   }
 };
 </script>
