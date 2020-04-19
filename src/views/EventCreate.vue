@@ -84,7 +84,6 @@ export default {
       };
     },
     createEvent() {
-      console.log(this.event);
       this.$store
         .dispatch("createEvent", this.event)
         .then(() => {
