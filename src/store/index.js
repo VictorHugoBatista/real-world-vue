@@ -56,7 +56,12 @@ export default new Vuex.Store({
         })
         .catch(error => console.log(error));
     },
-    fetchEvent({ commit }, id) {
+    fetchEvent({ commit, getters }, id) {
+      const event = getters.getEventById(id);
+      if (event) {
+        commit("SET_EVENT", event);
+        return;
+      }
       EventService.getEvent(id)
         .then(response => commit("SET_EVENT", response.data))
         .catch(error => console.log(error));
@@ -66,6 +71,9 @@ export default new Vuex.Store({
   getters: {
     categoriesLength(state) {
       return state.categories.length;
+    },
+    getEventById: state => id => {
+      return state.events.find(event => event.id === id)
     }
   }
 });
