@@ -1,5 +1,13 @@
 import EventService from "@/services/EventService";
 
+const createNotification = (type, message, vuexDispatch) => {
+  const notification = {
+    type: type,
+    message: message
+  };
+  vuexDispatch("notification/add", notification, { root: true });
+};
+
 export default {
   namespaced: true,
   state: {
@@ -23,12 +31,26 @@ export default {
     }
   },
   actions: {
-    createEvent({ commit }, event) {
-      return EventService.postEvent(event).then(() => {
-        commit("ADD_EVENT", event);
-      });
+    createEvent({ commit, dispatch }, event) {
+      return EventService.postEvent(event)
+        .then(() => {
+          commit("ADD_EVENT", event);
+          createNotification(
+            "success",
+            "Your event has been created!",
+            dispatch
+          );
+        })
+        .catch(error => {
+          createNotification(
+            "error",
+            `There as a problem fetching events: ${error.message}`,
+            dispatch
+          );
+          throw error;
+        });
     },
-    fetchEvents({ commit }, { perPage, page }) {
+    fetchEvents({ commit, dispatch }, { perPage, page }) {
       EventService.getEvents(perPage, page)
         .then(response => {
           commit("SET_EVENTS", response.data);
@@ -38,9 +60,15 @@ export default {
             currentPage: page
           });
         })
-        .catch(error => console.log(error));
+        .catch(error => {
+          createNotification(
+            "error",
+            `There as a problem fetching events: ${error.message}`,
+            dispatch
+          );
+        });
     },
-    fetchEvent({ commit, getters }, id) {
+    fetchEvent({ commit, getters, dispatch }, id) {
       const event = getters.getEventById(id);
       if (event) {
         commit("SET_EVENT", event);
@@ -48,12 +76,18 @@ export default {
       }
       EventService.getEvent(id)
         .then(response => commit("SET_EVENT", response.data))
-        .catch(error => console.log(error));
+        .catch(error => {
+          createNotification(
+            "error",
+            `There as a problem fetching events: ${error.message}`,
+            dispatch
+          );
+        });
     }
   },
   getters: {
     getEventById: state => id => {
-      return state.events.find(event => event.id === id)
+      return state.events.find(event => event.id === id);
     }
   }
 };
