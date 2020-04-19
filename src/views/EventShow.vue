@@ -3,7 +3,9 @@
     <div class="event-header">
       <span class="eyebrow">@{{ event.time }} on {{ event.date }}</span>
       <h1 class="title">{{ event.title }}</h1>
-      <h5>Organized by {{ event.organizer }}</h5>
+      <h5 v-if="event.organizer">
+        Organized by {{ event.organizer ? event.organizer.name : "" }}
+      </h5>
       <h5>Category: {{ event.category }}</h5>
     </div>
 
@@ -24,7 +26,8 @@
       <li
         v-for="(attendee, index) in event.attendees"
         :key="index"
-        class="list-item">
+        class="list-item"
+      >
         <b>{{ attendee.name }}</b>
       </li>
     </ul>
@@ -44,6 +47,6 @@ export default {
     EventService.getEvent(this.id)
       .then(response => (this.event = response.data))
       .catch(error => console.log(error));
-  },
+  }
 };
 </script>
