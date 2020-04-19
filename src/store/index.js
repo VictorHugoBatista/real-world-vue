@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import EventService from "@/services/EventService";
+import * as user from "./modules/user";
 
 Vue.use(Vuex);
 
@@ -9,10 +10,6 @@ export default new Vuex.Store({
     events: [],
     hasNextPage: true,
     event: {},
-    user: {
-      id: "abc123",
-      name: "Adam Jahr"
-    },
     categories: [
       "sustainability",
       "nature",
@@ -67,7 +64,9 @@ export default new Vuex.Store({
         .catch(error => console.log(error));
     },
   },
-  modules: {},
+  modules: {
+    user
+  },
   getters: {
     categoriesLength(state) {
       return state.categories.length;
